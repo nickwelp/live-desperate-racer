@@ -1,0 +1,27 @@
+using UnityEngine;
+using System.Collections;
+
+public class VectorPid : MonoBehaviour
+{
+	public float pFactor, iFactor, dFactor;
+	
+	private Vector3 integral;
+	private Vector3 lastError;
+	
+	public VectorPid(float pFactor, float iFactor, float dFactor)
+	{
+		this.pFactor = pFactor;
+		this.iFactor = iFactor;
+		this.dFactor = dFactor;
+	}
+	
+	public Vector3 AdjustError(Vector3 currentError, float timeFrame)
+	{
+		integral += currentError * timeFrame;
+		var deriv = (currentError - lastError) / timeFrame;
+		lastError = currentError;
+		return currentError * pFactor
+			+ integral * iFactor
+				+ deriv * dFactor;
+	}
+}
